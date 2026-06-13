@@ -1,0 +1,47 @@
+# Walkthrough - Endpoints de Consulta de Proyectos (Project Read Model)
+
+Se han implementado con éxito los casos de uso, métodos de repositorio y endpoints necesarios para realizar lecturas de proyectos bajo las especificaciones del contrato.
+
+## Cambios Realizados
+
+### Capa de Dominio (Domain Layer)
+- **[ProjectRepository.java](projectManager/java-app/src/main/java/domain/repository/ProjectRepository.java)**:
+  - Declarado el método `List<Project> findAll()` en la interfaz del puerto.
+
+### Capa de Aplicación (Application Layer)
+- **[GetAllProjectsUseCase.java](projectManager/java-app/src/main/java/application/usecase/GetAllProjectsUseCase.java)**:
+  - Caso de uso que recupera la lista completa de proyectos del puerto y los mapea a `ProjectResponseDTO` a través del mapper.
+- **[GetProjectByIdUseCase.java](projectManager/java-app/src/main/java/application/usecase/GetProjectByIdUseCase.java)**:
+  - Caso de uso que busca un proyecto específico por ID. Lanza `ResourceNotFoundException` si no existe.
+
+### Capa de Infraestructura (Infrastructure Layer)
+- **[ProjectRepositoryImp.java](projectManager/java-app/src/main/java/infrastructure/persistence/repository/implementations/ProjectRepositoryImp.java)**:
+  - Implementado `findAll()` para delegar en `jpaRepository.findAll()` y mapear el retorno a dominio.
+- **[ProjectController.java](projectManager/java-app/src/main/java/infrastructure/controller/ProjectController.java)**:
+  - Inyectados los nuevos casos de uso.
+  - Implementados los endpoints `GET /projects` y `GET /projects/{projectId}` protegidos por Spring Security.
+
+---
+
+## Pruebas y Resultados de Validación
+
+### Pruebas Unitarias
+- **[GetAllProjectsUseCaseTest.java](projectManager/java-app/src/test/java/application/usecase/GetAllProjectsUseCaseTest.java)**:
+  - Valida el listado correcto con elementos cargados y el retorno de un arreglo vacío `[]` (HTTP 200 OK) si no hay proyectos.
+- **[GetProjectByIdUseCaseTest.java](projectManager/java-app/src/test/java/application/usecase/GetProjectByIdUseCaseTest.java)**:
+  - Valida la respuesta correcta al buscar por ID existente y el lanzamiento de `ResourceNotFoundException` en caso contrario.
+
+### Pruebas de Integración
+- **[ProjectControllerIntegrationTest.java](projectManager/java-app/src/test/java/infrastructure/controller/ProjectControllerIntegrationTest.java)**:
+  - Añadidos tests específicos para validar el retorno HTTP de `GET /projects` (200 OK y arreglo) y `GET /projects/{projectId}` (200 OK con JSON correspondiente o 404 Not Found si el ID no existe).
+
+Se ejecutó la suite completa de pruebas:
+```powershell
+.\mvnw clean test
+```
+
+Resultados obtenidos:
+- **Total de pruebas ejecutadas**: 73
+- **Fallas**: 0
+- **Errores**: 0
+- **Resultado**: `BUILD SUCCESS` (Compilación limpia y paso del 100% de los tests).

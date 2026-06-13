@@ -1,0 +1,46 @@
+# Compiled output
+angular-app/dist/
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+java-app/node_modules/
+java-app/npm-debug.log
+java-app/yarn-error.log
+java-app/target/
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/mcp.json
+.history/*
+
+# Miscellaneous
+angular-app/.angular/
+angular-app/node_modules/
+angular-app/.sass-cache/
+connect.lock
+coverage
+libpeerconnection.log
+angular-app/testem.log
+typings
+angular-app/__screenshots__/
+SPECexamples.md
+
+# System files
+.DS_Store
+Thumbs.db
+#
