@@ -17,7 +17,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       if (error instanceof HttpErrorResponse) {
         // Business Restriction 1: 401 Unauthorized -> Automatic logout and redirect
         if (error.status === 401) {
-          console.warn('Session expired or unauthorized (401). Triggering automatic logout.');
           authService.logout();
         } 
         // Business Restriction 2: 500+ Internal Server Error -> Show error toast
