@@ -24,7 +24,7 @@
 - **Formularios:** **Reactive Forms** para el ingreso del nuevo comentario, garantizando que el botón de envío esté deshabilitado si el texto o el autor están vacíos.
 
   
-- **Componentes:** Separar responsabilidades creando un componente padre (`TaskDetailComponent`) y un formulario hijo presentacional (`CommentFormComponent`) si la complejidad lo amerita. |
+- **Componentes:** Separar responsabilidades creando un componente padre (`TaskDetailComponent`) y un formulario hijo presentacional (`CommentFormComponent`), responsable de emitir un evento `commentSubmitted` al componente padre. |
 | **Criterios de aceptación** | **Criterio 1 (Carga exitosa):**
 
   
@@ -60,4 +60,17 @@
 **Cuando** se intenta cargar la vista,
 
   
-**Entonces** el sistema captura el error HTTP devuelto por el backend y muestra una pantalla o alerta indicando "La tarea no pertenece al proyecto referenciado". |
+**Entonces** el sistema captura el error HTTP devuelto por el backend y muestra una pantalla o alerta indicando "La tarea no pertenece al proyecto referenciado".
+
+  
+  
+**Criterio 4 (Fallo al agregar comentario):**
+
+  
+**Dado** que el usuario completa el formulario de comentario y hace submit,
+
+  
+**Cuando** la petición `POST /projects/{projectId}/tasks/{taskId}/comments` falla por error de red o del servidor,
+
+  
+**Entonces** la UI muestra un mensaje de error dentro de la sección de comentarios indicando que no se pudo agregar el comentario, sin interrumpir la visualización de la tarea ni utilizar el `alert()` nativo del navegador. |

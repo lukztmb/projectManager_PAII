@@ -60,4 +60,17 @@
 **Cuando** el usuario hace clic sobre la tarjeta del proyecto con ID 5,
 
   
-**Entonces** el router de Angular navega a la URL `/projects/5`. |
+**Entonces** el router de Angular navega a la URL `/projects/5`.
+
+  
+  
+**Criterio 4 (Error de red):**
+
+  
+**Dado** que el usuario autenticado intenta cargar la lista de proyectos,
+
+  
+**Cuando** el backend no está disponible o responde con un error de servidor (500+),
+
+  
+**Entonces** la UI muestra un mensaje de error visual dentro de la vista (no un `alert()`) indicando que no se pudo conectar con el servidor para obtener los proyectos. |

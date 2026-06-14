@@ -76,5 +76,18 @@
 **Cuando** el backend responde con un error `401 Unauthorized`,
 
   
-**Entonces** la UI captura el error y muestra un mensaje en pantalla indicando "Credenciales incorrectas". |
+**Entonces** la UI captura el error y muestra un mensaje en pantalla indicando "Credenciales incorrectas".
+
+  
+  
+**Criterio 5 (Logout automático por token expirado):**
+
+  
+**Dado** que el usuario tiene una sesión activa pero su JWT ha expirado en el servidor,
+
+  
+**Cuando** cualquier petición HTTP de la aplicación recibe un `401 Unauthorized` como respuesta,
+
+  
+**Entonces** el interceptor HTTP destruye la sesión local (limpia localStorage y resetea las Signals de autenticación) y redirige automáticamente a `/login` sin intervención del usuario. |
 
