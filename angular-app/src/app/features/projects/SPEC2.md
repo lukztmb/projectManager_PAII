@@ -47,16 +47,29 @@
 
   
   
-**Criterio 2 (Validación cruzada de fechas):**
+**Criterio 2a (endDate ≥ startDate):**
 
   
-**Dado** que el usuario está llenando el formulario,
+**Dado** que el usuario completa el formulario,
 
   
-**Cuando** ingresa una `endDate` que es anterior a la `startDate` o anterior a la fecha de hoy,
+**Cuando** ingresa una `endDate` anterior a la `startDate`,
 
   
-**Entonces** el formulario se marca como inválido, se muestra un mensaje de error debajo del campo de fecha y el botón de enviar se deshabilita.
+**Entonces** el formulario se marca como inválido con el mensaje "La fecha de fin debe ser mayor o igual a la fecha de inicio" y el botón se deshabilita.
+
+  
+  
+**Criterio 2b (endDate ≥ hoy):**
+
+  
+**Dado** que el usuario completa el formulario,
+
+  
+**Cuando** ingresa una `endDate` anterior a la fecha actual,
+
+  
+**Entonces** el campo `endDate` se marca individualmente como inválido con el mensaje "La fecha de fin no puede ser anterior a hoy" y el botón se deshabilita.
 
   
   
@@ -69,5 +82,18 @@
 **Cuando** el usuario intenta crear un proyecto con un nombre que ya existe en la base de datos,
 
   
-**Entonces** el backend responde con error 409 y la UI muestra un mensaje claro indicando que "El nombre del proyecto ya está en uso". |
+**Entonces** el backend responde con error 409 y la UI muestra un mensaje claro indicando que "El nombre del proyecto ya está en uso".
+
+  
+  
+**Criterio 4 (Validación del backend - 400):**
+
+  
+**Dado** que el usuario envía un formulario con datos que pasan la validación del frontend,
+
+  
+**Cuando** el backend rechaza los datos con un error `400 Bad Request` (por restricciones de validación del servidor),
+
+  
+**Entonces** la UI captura el error y muestra un mensaje genérico indicando "Error de validación del servidor. Revise los datos ingresados." sin romper la experiencia de usuario. |
 

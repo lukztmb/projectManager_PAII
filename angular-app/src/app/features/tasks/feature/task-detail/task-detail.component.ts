@@ -14,7 +14,7 @@ import { CommentFormComponent } from '../../ui/comment-form/comment-form.compone
     <section class="max-w-4xl mx-auto p-6 mt-6">
       @if (globalError()) {
         <div class="p-6 bg-red-50 border-2 border-red-500 rounded-lg text-center">
-          <h2 class="text-xl font-bold text-red-700 mb-2">Access Denied</h2>
+          <h2 class="text-xl font-bold text-red-700 mb-2">Acceso Denegado</h2>
           <p class="text-red-600">{{ globalError() }}</p>
         </div>
       }
@@ -31,7 +31,7 @@ import { CommentFormComponent } from '../../ui/comment-form/comment-form.compone
           <header class="p-6 border-b border-gray-100 bg-gray-50 flex justify-between items-start">
             <div>
               <span class="text-xs font-semibold tracking-wider text-blue-600 uppercase mb-1 block">
-                Task #{{ currentTask.id }}
+                Tarea #{{ currentTask.id }}
               </span>
               <h2 class="text-2xl font-bold text-gray-900">{{ currentTask.title }}</h2>
             </div>
@@ -44,7 +44,7 @@ import { CommentFormComponent } from '../../ui/comment-form/comment-form.compone
             <div class="md:col-span-2 space-y-6">
               
               <section>
-                <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Comments</h3>
+                <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Comentarios</h3>
                 
                 <div class="space-y-4 mb-6 max-h-96 overflow-y-auto">
                   @for (comment of currentTask.comments; track comment.id) {
@@ -56,14 +56,18 @@ import { CommentFormComponent } from '../../ui/comment-form/comment-form.compone
                       <p class="text-gray-700 text-sm">{{ comment.text }}</p>
                     </article>
                   } @empty {
-                    <p class="text-gray-500 italic text-sm">No comments yet. Be the first to comment!</p>
+                    <p class="text-gray-500 italic text-sm">Aún no hay comentarios. ¡Sé el primero en comentar!</p>
                   }
                 </div>
 
                 <app-comment-form (commentSubmitted)="handleNewComment($event)" />
                 
+                @if (commentError()) {
+                  <p class="text-sm text-red-600 mt-2">{{ commentError() }}</p>
+                }
+
                 @if (isSubmittingComment()) {
-                  <p class="text-sm text-blue-600 mt-2 animate-pulse">Adding comment...</p>
+                  <p class="text-sm text-blue-600 mt-2 animate-pulse">Agregando comentario...</p>
                 }
               </section>
 
@@ -71,8 +75,8 @@ import { CommentFormComponent } from '../../ui/comment-form/comment-form.compone
 
             <aside class="space-y-4 text-sm text-gray-600">
               <div class="p-4 bg-gray-50 rounded-lg">
-                <p class="mb-2"><strong class="text-gray-900">Assignee:</strong> <br>{{ currentTask.assignee || 'Unassigned' }}</p>
-                <p class="mb-2"><strong class="text-gray-900">Estimate:</strong> <br>{{ currentTask.estimatedHours }} hrs</p>
+                <p class="mb-2"><strong class="text-gray-900">Responsable:</strong> <br>{{ currentTask.assignee || 'Sin asignar' }}</p>
+                <p class="mb-2"><strong class="text-gray-900">Estimación:</strong> <br>{{ currentTask.estimatedHours }} hrs</p>
               </div>
             </aside>
           </div>
@@ -94,6 +98,7 @@ export class TaskDetailComponent implements OnInit {
   public readonly isLoading = signal<boolean>(true);
   public readonly globalError = signal<string | null>(null);
   public readonly isSubmittingComment = signal<boolean>(false);
+  public readonly commentError = signal<string | null>(null);
 
   public ngOnInit(): void {
     this.loadTaskDetails();
@@ -132,6 +137,7 @@ export class TaskDetailComponent implements OnInit {
    */
   public handleNewComment(payload: TaskCommentRequest): void {
     this.isSubmittingComment.set(true);
+    this.commentError.set(null);
 
     this.taskService.addCommentToTask(this.projectId(), this.taskId(), payload).subscribe({
       next: (newComment) => {
@@ -147,9 +153,7 @@ export class TaskDetailComponent implements OnInit {
       },
       error: (error: HttpErrorResponse) => {
         this.isSubmittingComment.set(false);
-        console.error('Failed to add comment', error);
-        // In a real app, we might want to use a toast notification here instead of globalError
-        alert('Failed to add comment. Please try again.'); 
+        this.commentError.set('No se pudo agregar el comentario. Intente nuevamente.');
       }
     });
   }

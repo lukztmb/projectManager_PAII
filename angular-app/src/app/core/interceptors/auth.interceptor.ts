@@ -21,7 +21,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(authReq).pipe(
     catchError((error: any) => {
       if (error instanceof HttpErrorResponse && error.status === 401) {
-        console.warn('Unauthorized request (401) detected. Automatic logout triggered.');
         authService.logout();
       }
       return throwError(() => error);

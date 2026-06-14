@@ -74,7 +74,7 @@ export class TaskListComponent implements OnInit {
         this.isLoading.set(false);
       },
       error: (errorResponse: unknown) => {
-        console.error('Failed to fetch tasks:', errorResponse);
+        // error is handled and displayed in UI via globalError signal from service state or local handling
         this.errorMessage.set('Hubo un problema de comunicación con el servidor al intentar obtener las tareas.');
         this.isLoading.set(false);
       }

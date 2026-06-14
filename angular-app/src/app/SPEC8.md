@@ -18,7 +18,10 @@
 - **Estilos (Tailwind CSS):** Implementar un diseño responsivo utilizando Flexbox o CSS Grid. El layout debe ocupar el alto total de la pantalla (`min-h-screen`), dejando la parte superior para el Navbar y el resto (`flex-1`) para el contenido dinámico.
 
   
-- **Reactividad:** Inyectar el `AuthService` para poder consumir la funcionalidad de cierre de sesión y leer Signals si fuera necesario mostrar datos del usuario activo. |
+- **Reactividad:** Inyectar el `AuthService` para poder consumir la funcionalidad de cierre de sesión y leer Signals si fuera necesario mostrar datos del usuario activo.
+
+  
+- **Rutas Anidadas:** Nota: La ruta `projects/:projectId/tasks/in-progress` declarada en `app.routes.ts` es redundante y actúa como un placeholder para un futuro filtrado por proyecto, o bien debe removerse frente a la global `tasks/in-progress`. |
 | **Criterios de aceptación** | **Criterio 1 (Envoltura de Vistas):**
 
   
@@ -54,7 +57,20 @@
 **Cuando** el ancho de pantalla es inferior al breakpoint `md` de Tailwind,
 
   
-**Entonces** el Navbar se adapta correctamente (ej. apilando los elementos o ajustando márgenes) sin romper el contenedor principal de la aplicación. |
+**Entonces** el Navbar se adapta correctamente (ej. apilando los elementos o ajustando márgenes) sin romper el contenedor principal de la aplicación.
+
+  
+  
+**Criterio 4 (Protección del historial post-logout):**
+
+  
+**Dado** que el usuario ha ejecutado el cierre de sesión,
+
+  
+**Cuando** presiona el botón "Atrás" del navegador,
+
+  
+**Entonces** **no** es devuelto a ninguna vista protegida de la aplicación; permanece en `/login` o es redirigido allí por el guard. |
 
 ### La justificación arquitectónica (El "Por qué")
 

@@ -57,4 +57,17 @@
 **Cuando** hace clic en el botón de ver detalle de la tarea ID 5,
 
   
-**Entonces** el Router lo navega hacia la ruta `/projects/1/tasks/5`. |
+**Entonces** el Router lo navega hacia la ruta `/projects/1/tasks/5`.
+
+  
+  
+**Criterio 4 (Empty state de tareas):**
+
+  
+**Dado** que el usuario navega al detalle de un proyecto activo que no tiene tareas,
+
+  
+**Cuando** la petición `GET /projects/{projectId}/tasks` devuelve un arreglo vacío,
+
+  
+**Entonces** la sección de tareas muestra un mensaje amigable ("Este proyecto aún no tiene tareas asignadas") con orientación contextual según el estado del proyecto. |

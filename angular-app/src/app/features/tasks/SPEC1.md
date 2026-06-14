@@ -5,7 +5,7 @@
 | --- | --- |
 | **Nombre de la feature** | Visualización de Tareas en Progreso (In-Progress Task List) |
 | **Descripción general** | El sistema debe permitir al usuario visualizar un listado de todas las tareas que actualmente se encuentran en curso. Esto establece la base de comunicación de lectura (GET) con la API REST y la estructura inicial de componentes. |
-| **Endpoints involucrados** | - `GET /tasks?status=IN_PROGRESS` |
+| **Endpoints involucrados** | - `GET /projects/tasks?status=IN_PROGRESS` |
 | **Restricciones de negocio** | 1. Solo se deben renderizar en la vista las tareas obtenidas del endpoint (las cuales deben estar lógicamente en estado `IN_PROGRESS`).
 
   
@@ -64,4 +64,16 @@
 **Cuando** el `TaskService` falla al obtener los datos,
 
   
-**Entonces** la UI captura el error mediante Signals y muestra un mensaje indicando que hubo un problema de comunicación. |
+**Entonces** la UI captura el error mediante Signals y muestra un mensaje indicando que hubo un problema de comunicación.
+
+  
+**Criterio 4 (Assignee nulo):**
+
+  
+**Dado** que la API devuelve una tarea cuyo campo `assignee` es `null` o no está definido,
+
+  
+**Cuando** la tarjeta de la tarea se renderiza en la lista,
+
+  
+**Entonces** el campo de responsable muestra el texto "Sin asignar" en lugar de dejar el espacio vacío o mostrar `null`. |

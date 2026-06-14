@@ -8,7 +8,7 @@
 | **Restricciones de negocio** | 1. **Campos obligatorios:** El título (`title`) es obligatorio.
 
   
-2. **Validación de esfuerzo:** Las horas estimadas (`estimateHours`) deben ser estrictamente mayores a cero (`> 0`).
+2. **Validación de esfuerzo:** Las horas estimadas (`estimatedHours`) deben ser estrictamente mayores a cero (`> 0`).
 
   
 3. **Estados permitidos:** El estado de la tarea (`status`) está limitado a `TODO`, `IN_PROGRESS` o `DONE`.
@@ -44,7 +44,7 @@
 **Dado** que el usuario está completando el formulario,
 
   
-**Cuando** ingresa el valor `0` o un número negativo en `estimateHours`,
+**Cuando** ingresa el valor `0` o un número negativo en `estimatedHours`,
 
   
 **Entonces** el campo se marca como inválido, se muestra un mensaje de error y el botón de enviar se deshabilita.
@@ -60,5 +60,31 @@
 **Cuando** se envía la petición HTTP,
 
   
-**Entonces** el backend responde con un error 409 y la UI captura el error mostrando una alerta: "No se puede añadir una tarea a un proyecto cerrado". |
+**Entonces** el backend responde con un error 409 y la UI captura el error mostrando una alerta: "No se puede añadir una tarea a un proyecto cerrado".
+
+  
+  
+**Criterio 4 (Proyecto no encontrado - 404):**
+
+  
+**Dado** que el formulario es válido y el usuario intenta crear una tarea,
+
+  
+**Cuando** el `projectId` en la URL ya no existe en la base de datos (fue eliminado),
+
+  
+**Entonces** el backend responde con `404 Not Found` y la UI muestra un mensaje informativo: "El proyecto no fue encontrado. Pudo haber sido eliminado."
+
+  
+  
+**Criterio 5 (Flujo de cancelación):**
+
+  
+**Dado** que el usuario está completando el formulario de creación de tarea,
+
+  
+**Cuando** presiona el botón "Cancelar",
+
+  
+**Entonces** el sistema navega de vuelta al detalle del proyecto padre (`/projects/:projectId`) sin enviar ninguna petición al backend. |
 

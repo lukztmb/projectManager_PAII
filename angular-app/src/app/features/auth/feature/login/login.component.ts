@@ -172,7 +172,7 @@ export class LoginComponent {
       },
       error: (error: any) => {
         this.isLoading.set(false);
-        console.error('Login error:', error);
+        // error is handled by UI toast / inline messages
         
         if (error.status === 401) {
           this.errorMessage.set('Credenciales incorrectas');

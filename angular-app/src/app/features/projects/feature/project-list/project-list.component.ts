@@ -171,7 +171,7 @@ export class ProjectListComponent implements OnInit {
         this.isLoading.set(false);
       },
       error: (err: any) => {
-        console.error('Failed to load projects:', err);
+        // error is handled and displayed in UI
         this.error.set('No se pudo establecer conexión con el servidor para obtener los proyectos.');
         this.isLoading.set(false);
       }

@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { 
   ReactiveFormsModule, 
   FormGroup, 
@@ -18,8 +19,8 @@ import { ProjectStatus, ProjectRequest } from '../../models/project.model';
   template: `
     <section class="max-w-2xl mx-auto p-6 mt-10 bg-white rounded-xl shadow-md">
       <header class="mb-6 border-b pb-4">
-        <h2 class="text-2xl font-bold text-gray-900">Create New Project</h2>
-        <p class="text-gray-600 text-sm mt-1">Fill in the details to start a new project.</p>
+        <h2 class="text-2xl font-bold text-gray-900">Crear Nuevo Proyecto</h2>
+        <p class="text-gray-600 text-sm mt-1">Completa los datos para iniciar un nuevo proyecto.</p>
       </header>
 
       @if (globalError()) {
@@ -37,7 +38,7 @@ import { ProjectStatus, ProjectRequest } from '../../models/project.model';
       <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="space-y-6">
         
         <div>
-          <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Project Name *</label>
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre del Proyecto *</label>
           <input 
             type="text" 
             id="name" 
@@ -47,13 +48,13 @@ import { ProjectStatus, ProjectRequest } from '../../models/project.model';
             placeholder="e.g., Website Redesign"
           >
           @if (isFieldInvalid('name')) {
-            <p class="mt-1 text-sm text-red-600">Name is required.</p>
+            <p class="mt-1 text-sm text-red-600">El nombre es obligatorio.</p>
           }
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label for="startDate" class="block text-sm font-medium text-gray-700 mb-1">Start Date *</label>
+            <label for="startDate" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Inicio *</label>
             <input 
               type="date" 
               id="startDate" 
@@ -64,7 +65,7 @@ import { ProjectStatus, ProjectRequest } from '../../models/project.model';
           </div>
 
           <div>
-            <label for="endDate" class="block text-sm font-medium text-gray-700 mb-1">End Date *</label>
+            <label for="endDate" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Fin *</label>
             <input 
               type="date" 
               id="endDate" 
@@ -73,17 +74,17 @@ import { ProjectStatus, ProjectRequest } from '../../models/project.model';
               [class.border-red-500]="isFieldInvalid('endDate') || projectForm.errors?.['dateRangeInvalid']"
             >
             @if (projectForm.get('endDate')?.hasError('pastDate')) {
-              <p class="mt-1 text-sm text-red-600">End date cannot be in the past.</p>
+              <p class="mt-1 text-sm text-red-600">La fecha de fin no puede ser anterior a hoy.</p>
             }
           </div>
         </div>
         
         @if (projectForm.errors?.['dateRangeInvalid'] && (projectForm.touched || projectForm.dirty)) {
-          <p class="text-sm text-red-600">End date must be greater than or equal to the start date.</p>
+          <p class="text-sm text-red-600">La fecha de fin debe ser mayor o igual a la fecha de inicio.</p>
         }
 
         <div>
-          <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Initial Status *</label>
+          <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Estado Inicial *</label>
           <select 
             id="status" 
             formControlName="status"
@@ -95,7 +96,7 @@ import { ProjectStatus, ProjectRequest } from '../../models/project.model';
         </div>
 
         <div>
-          <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description (Optional)</label>
+          <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Descripción (Opcional)</label>
           <textarea 
             id="description" 
             formControlName="description"
@@ -112,9 +113,9 @@ import { ProjectStatus, ProjectRequest } from '../../models/project.model';
             class="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             @if (isSubmitting()) {
-              <span>Saving...</span>
+              <span>Guardando...</span>
             } @else {
-              <span>Create Project</span>
+              <span>Crear Proyecto</span>
             }
           </button>
         </div>
@@ -124,6 +125,7 @@ import { ProjectStatus, ProjectRequest } from '../../models/project.model';
 })
 export class ProjectCreateComponent {
   private readonly projectService = inject(ProjectService);
+  private readonly router = inject(Router);
   
   // Expose Enum to the template
   public readonly ProjectStatus = ProjectStatus;
@@ -203,8 +205,10 @@ export class ProjectCreateComponent {
     this.projectService.createProject(payload).subscribe({
       next: () => {
         this.isSubmitting.set(false);
-        this.successMessage.set('Project created successfully!');
-        this.projectForm.reset({ status: ProjectStatus.PLANNED }); // Reset to default valid state
+        this.successMessage.set('¡Proyecto creado exitosamente!');
+        setTimeout(() => {
+          this.router.navigate(['/projects']);
+        }, 1500);
       },
       error: (error: HttpErrorResponse) => {
         this.isSubmitting.set(false);
