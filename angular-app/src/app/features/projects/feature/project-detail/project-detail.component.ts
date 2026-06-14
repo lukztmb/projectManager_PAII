@@ -1,7 +1,7 @@
 import { Component, inject, signal, input, effect } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of, catchError } from 'rxjs';
 import { ProjectService } from '../../data_access/project.service';
 import { Project, ProjectStatus } from '../../models/project.model';
 import { Task } from '../../../tasks/models/task.model';
@@ -128,7 +128,16 @@ import { TaskCardComponent } from '../../../tasks/ui/task-card/task-card.compone
           <div class="space-y-6">
             <h3 class="text-xl font-bold text-slate-800 tracking-tight">Tareas del Proyecto</h3>
 
-            @if (tasks().length === 0) {
+            @if (taskLoadError()) {
+              <div class="mb-4 p-4 bg-orange-50 border border-orange-200 rounded-xl flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="text-orange-700 text-sm font-medium">{{ taskLoadError() }}</span>
+              </div>
+            }
+
+            @if (tasks().length === 0 && !taskLoadError()) {
               <!-- Empty state for project tasks -->
               <div class="text-center bg-white border border-slate-150 rounded-2xl p-10 shadow-sm max-w-md mx-auto animate-fade-in">
                 <div class="inline-flex items-center justify-center w-12 h-12 bg-slate-50 rounded-xl mb-4 text-slate-400">
@@ -190,6 +199,7 @@ export class ProjectDetailComponent {
   public readonly tasks = signal<Task[]>([]);
   public readonly isLoading = signal<boolean>(true);
   public readonly error = signal<string | null>(null);
+  public readonly taskLoadError = signal<string | null>(null);
 
   constructor() {
     // Reacts dynamically to changes in projectId routing signal parameter
@@ -211,7 +221,12 @@ export class ProjectDetailComponent {
     // forkJoin triggers both HTTP requests concurrently
     forkJoin({
       project: this.projectService.getProjectById(id),
-      tasks: this.projectService.getProjectTasks(id)
+      tasks: this.projectService.getProjectTasks(id).pipe(
+        catchError(() => {
+          this.taskLoadError.set('No se pudieron cargar las tareas del proyecto.');
+          return of([]);
+        })
+      )
     }).subscribe({
       next: (result: { project: Project; tasks: Task[] }) => {
         this.project.set(result.project);
@@ -219,7 +234,7 @@ export class ProjectDetailComponent {
         this.isLoading.set(false);
       },
       error: (err: any) => {
-        console.error('Failed to load project dashboard details:', err);
+        // error is handled and displayed in UI
         this.error.set('No se pudo establecer conexión con el servidor al intentar cargar los detalles de este proyecto.');
         this.isLoading.set(false);
       }

@@ -12,7 +12,7 @@ import { TaskStatus, TaskRequest } from '../../models/task.model';
   template: `
     <section class="max-w-2xl mx-auto p-6 mt-10 bg-white rounded-xl shadow-md">
       <header class="mb-6 border-b pb-4">
-        <h2 class="text-2xl font-bold text-gray-900">Create New Task</h2>
+        <h2 class="text-2xl font-bold text-gray-900">Crear Nueva Tarea</h2>
         <p class="text-gray-600 text-sm mt-1">Adding task to Project ID: <span class="font-semibold">{{ projectId() }}</span></p>
       </header>
 
@@ -25,7 +25,7 @@ import { TaskStatus, TaskRequest } from '../../models/task.model';
       <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="space-y-6">
         
         <div>
-          <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Task Title *</label>
+          <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Título de la Tarea *</label>
           <input 
             type="text" 
             id="title" 
@@ -35,13 +35,13 @@ import { TaskStatus, TaskRequest } from '../../models/task.model';
             placeholder="e.g., Create landing page"
           >
           @if (isFieldInvalid('title')) {
-            <p class="mt-1 text-sm text-red-600">Title is required.</p>
+            <p class="mt-1 text-sm text-red-600">El título es obligatorio.</p>
           }
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label for="estimatedHours" class="block text-sm font-medium text-gray-700 mb-1">Estimate (Hours) *</label>
+            <label for="estimatedHours" class="block text-sm font-medium text-gray-700 mb-1">Estimación (Horas) *</label>
             <input 
               type="number" 
               id="estimatedHours" 
@@ -51,7 +51,7 @@ import { TaskStatus, TaskRequest } from '../../models/task.model';
               [class.border-red-500]="isFieldInvalid('estimatedHours')"
             >
             @if (taskForm.get('estimatedHours')?.hasError('min')) {
-              <p class="mt-1 text-sm text-red-600">Estimate must be greater than 0.</p>
+              <p class="mt-1 text-sm text-red-600">La estimación debe ser mayor a 0.</p>
             }
           </div>
 
@@ -70,7 +70,7 @@ import { TaskStatus, TaskRequest } from '../../models/task.model';
         </div>
 
         <div>
-          <label for="assignee" class="block text-sm font-medium text-gray-700 mb-1">Assignee (Optional)</label>
+          <label for="assignee" class="block text-sm font-medium text-gray-700 mb-1">Responsable (Opcional)</label>
           <input 
             type="text" 
             id="assignee" 
@@ -86,7 +86,7 @@ import { TaskStatus, TaskRequest } from '../../models/task.model';
             (click)="navigateBack()"
             class="px-6 py-2 bg-gray-100 text-gray-700 font-medium rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
           >
-            Cancel
+            Cancelar
           </button>
           <button 
             type="submit" 
@@ -94,9 +94,9 @@ import { TaskStatus, TaskRequest } from '../../models/task.model';
             class="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             @if (isSubmitting()) {
-              <span>Saving...</span>
+              <span>Guardando...</span>
             } @else {
-              <span>Create Task</span>
+              <span>Crear Tarea</span>
             }
           </button>
         </div>
@@ -140,7 +140,7 @@ export class TaskCreateComponent {
    */
   public navigateBack(): void {
     // Assuming you will have a route like /projects/1/tasks
-    this.router.navigate(['/projects', this.projectId(), 'tasks']);
+    this.router.navigate(['/projects', this.projectId()]);
   }
 
   /**

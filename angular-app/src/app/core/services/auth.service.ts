@@ -47,7 +47,7 @@ export class AuthService {
       }),
       catchError((error: HttpErrorResponse) => {
         // Mock server handling: json-server returns 404/0 for /api/auth/login
-        if (error.status === 404 || error.status === 0) {
+        if (environment.useMockAuth && (error.status === 404 || error.status === 0)) {
           console.warn('Authentication endpoint not found on mock server. Falling back to local simulation.');
 
           // Business Rule simulation: error case
@@ -75,7 +75,7 @@ export class AuthService {
    */
   public logout(): void {
     this.clearSession();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login'], { replaceUrl: true });
   }
 
   /**
